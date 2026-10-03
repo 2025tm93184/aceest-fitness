@@ -20,10 +20,10 @@ From the project root:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python app.py
+flask --app app run --host 0.0.0.0 --port 5001
 ```
 
-The API listens on `http://127.0.0.1:5000`.
+The API listens on `http://127.0.0.1:5001`. Port 5000 is already in use on the lab machine, so the app is started on port 5001.
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -34,7 +34,7 @@ The API listens on `http://127.0.0.1:5000`.
 | POST | `/clients` | JSON `{"name": "Ravi", "age": 28, "weight": 70, "program": "Fat Loss (FL)"}` |
 | GET | `/clients` | Clients saved in this process |
 
-On the shared lab machine, port 5000 is often already in use. Run the container on host port 5001 and open `http://127.0.0.1:5001/health`.
+Open `http://127.0.0.1:5001/health` to confirm the app is running.
 
 ## Run tests manually
 

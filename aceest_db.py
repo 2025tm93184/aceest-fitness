@@ -62,7 +62,7 @@ def init_db():
     )
     """)
 
-    #cur.execute("""
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS metrics (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         client_name TEXT,

@@ -99,5 +99,33 @@ pytest -q
 
 **Build Now** checks out the latest `main` commit, creates a virtual environment in the Jenkins workspace, installs `requirements.txt`, compiles `app.py`, and runs Pytest. A blue build means that checkout and test run finished without errors.
 
+The first build cloned `main` at commit `Rollback from v3.2.4 to v1.4.0` and then failed with `python3: not found`. That message comes from the Jenkins image, which does not ship Python. Run the `docker exec` install above once, then click **Build Now** again. Do not add `aceest_gui.py` to this shell step. The desktop window needs `tkinter`, and the Jenkins container does not have it.
+
+`jenkins.desktop` on the lab machine only opens this UI. The job builds `https://github.com/2025tm93184/aceest-fitness.git`, not a folder on a laptop Desktop. Push `main` before **Build Now**.
+
 GitHub Actions is the automated gate on every push and pull request. Jenkins is the controlled BUILD environment that fetches the same repository and validates it again.
+
+## Versions and rollback
+
+| Tag | What it is |
+|---|---|
+| `v1.4.0` | Flask app on `main`: `app.py`, Pytest, Docker, and GitHub Actions |
+| `v3.2.4` | Desktop window in `aceest_gui.py`, with SQLite setup in `aceest_db.py` |
+
+`aceest_gui.py` needs a display and the Tk library. On a Mac:
+
+```bash
+pip install matplotlib fpdf
+python3 aceest_gui.py
+```
+
+Login is `admin` / `admin`. Charts need `matplotlib`. **Generate PDF Report** needs `fpdf`.
+
+The lab host is Amazon Linux (`apt-get` is not installed there) and has no desktop. `python3 aceest_gui.py` fails with `ModuleNotFoundError: No module named 'tkinter'`. On that host, run the Flask service:
+
+```bash
+python3 app.py
+```
+
+`main` was restored with commit `Rollback from v3.2.4 to v1.4.0`. Tag `v3.2.4` stays in history. Tag `v1.4.0` is the Flask app the Jenkins job should build. The rollback is a new commit, not a force-push.
 
